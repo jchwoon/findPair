@@ -30,6 +30,7 @@ public class gameManager : MonoBehaviour
         for (int i = 0; i < rtans.Length; i++)
         {
             rtans[i] = (i / 2);
+            Debug.Log("hi");
         }
 
         int[] randomRtansArray = rtans.OrderBy(rtan => Random.Range(-1.0f, 1.0f)).ToArray();
