@@ -9,6 +9,7 @@ public class gameManager : MonoBehaviour
 {
 
     // Start is called before the first frame update
+    public Text retryBtn;
     public Text timeTxt;
     public GameObject card;
     public GameObject firstCard;
@@ -16,8 +17,8 @@ public class gameManager : MonoBehaviour
     public static gameManager instance;
     public Animator animator;
     float time;
+    int cardLeft;
 
-    //카드를 갖고오고 해당 카드를 똑같이 16번 찍으면 됨
     int[] rtans = new int[16];
 
     private void Awake()
@@ -27,6 +28,8 @@ public class gameManager : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1.0f;
+
         for (int i = 0; i < rtans.Length; i++)
         {
             rtans[i] = (i / 2);
@@ -47,6 +50,8 @@ public class gameManager : MonoBehaviour
 
             newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(rtanName);
         }
+
+        cardLeft = GameObject.Find("cards").transform.childCount;
     }
 
     // Update is called once per frame
@@ -54,6 +59,11 @@ public class gameManager : MonoBehaviour
     {
         time += Time.deltaTime;
         timeTxt.text = time.ToString("N2");
+
+        if (time >=30)
+        {
+            endGame();
+        }
     }
 
     public void isMatched()
@@ -70,9 +80,24 @@ public class gameManager : MonoBehaviour
         {
             firstCard.GetComponent<card>().destroyCard();
             secondCard.GetComponent<card>().destroyCard();
+
+            cardLeft -= 2;
+
+            if (cardLeft == 0)
+            {
+                endGame();
+            }
         }
+
 
         firstCard = null;
         secondCard = null;
+    }
+
+
+    void endGame()
+    {
+        Time.timeScale = 0.0f;
+        retryBtn.gameObject.SetActive(true);
     }
 }
